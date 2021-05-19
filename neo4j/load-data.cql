@@ -11,7 +11,7 @@ MERGE (c:CUSTOMER { id: toInteger(row.C_CUSTKEY) })
 ON CREATE SET
     c.C_NAME = row.C_NAME,
 	c.C_ADDRESS = row.C_ADDRESS,
-    c.C_NATIONKEY = row.C_NATIONKEY,
+    c.C_NATIONKEY = toInteger(row.C_NATIONKEY),
     c.C_PHONE = row.C_PHONE,
     c.C_ACCTBAL = toFloat(row.C_ACCTBAL),
     c.C_MKTSEGMENT = row.C_MKTSEGMENT,
@@ -28,8 +28,8 @@ CREATE INDEX l_linenumber_id FOR (l:LINEITEM) ON (l.L_LINENUMBER);
 
 USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM 'file:///lineitem.csv' AS row
 FIELDTERMINATOR '|'
-MERGE (l:LINEITEM)
-ON CREATE SET
+CREATE (l:LINEITEM)
+SET
     l.L_ORDERKEY = toInteger(row.L_ORDERKEY),
     l.L_PARTKEY = toInteger(row.L_PARTKEY),
     l.L_SUPPKEY = toInteger(row.L_SUPPKEY),
@@ -58,7 +58,7 @@ FIELDTERMINATOR '|'
 MERGE (n:NATION { id: toInteger(row.N_NATIONKEY) })
 ON CREATE SET
     n.N_NAME = row.N_NAME,
-    n.N_REGIONKEY = row.N_REGIONKEY,
+    n.N_REGIONKEY = toInteger(row.N_REGIONKEY),
     n.N_COMMENT = row.N_COMMENT
 ;
 
@@ -71,13 +71,13 @@ USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM 'file:///orders.csv' AS row
 FIELDTERMINATOR '|'
 MERGE (o:ORDERS { id: toInteger(row.O_ORDERKEY) })
 ON CREATE SET
-    o.O_CUSTKEY = row.O_CUSTKEY,
+    o.O_CUSTKEY = toInteger(row.O_CUSTKEY),
     o.O_ORDERSTATUS = row.O_ORDERSTATUS,
-    o.O_TOTALPRICE = row.O_TOTALPRICE,
+    o.O_TOTALPRICE = toFloat(row.O_TOTALPRICE),
     o.O_ORDERDATE = row.O_ORDERDATE,
     o.O_ORDERPRIORITY = row.O_ORDERPRIORITY,
     o.O_CLERK = row.O_CLERK,
-    o.O_SHIPPRIORITY = row.O_SHIPPRIORITY,
+    o.O_SHIPPRIORITY = toInteger(row.O_SHIPPRIORITY),
     o.O_COMMENT = row.O_COMMENT
 ;
 
@@ -89,12 +89,12 @@ CREATE INDEX ps_suppkey_id FOR (ps:PARTSUPP) ON (ps.PS_SUPPKEY);
 
 USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM 'file:///partsupp.csv' AS row
 FIELDTERMINATOR '|'
-MERGE (ps:PARTSUPP)
-ON CREATE SET
-    ps.PS_PARTKEY = row.PS_PARTKEY,
-    ps.PS_SUPPKEY = row.PS_SUPPKEY,
-    ps.PS_AVAILQTY = row.PS_AVAILQTY,
-    ps.PS_SUPPLYCOST = row.PS_SUPPLYCOST,
+CREATE (ps:PARTSUPP)
+SET
+    ps.PS_PARTKEY = toInteger(row.PS_PARTKEY),
+    ps.PS_SUPPKEY = toInteger(row.PS_SUPPKEY),
+    ps.PS_AVAILQTY = toInteger(row.PS_AVAILQTY),
+    ps.PS_SUPPLYCOST = toFloat(row.PS_SUPPLYCOST),
     ps.PS_COMMENT = row.PS_COMMENT
 ;
 
@@ -110,9 +110,9 @@ ON CREATE SET
     p.P_MFGR = row.P_MFGR,
     p.P_BRAND = row.P_BRAND,
     p.P_TYPE = row.P_TYPE,
-    p.P_SIZE = row.P_SIZE,
+    p.P_SIZE = toInteger(row.P_SIZE),
     p.P_CONTAINER = row.P_CONTAINER,
-    p.P_RETAILPRICE = row.P_RETAILPRICE,
+    p.P_RETAILPRICE = toFloat(row.P_RETAILPRICE),
     p.P_COMMENT = row.P_COMMENT
 ;
 
@@ -139,9 +139,9 @@ MERGE (s:SUPPLIER { id: toInteger(row.S_SUPPKEY) })
 ON CREATE SET
     s.S_NAME = row.S_NAME,
     s.S_ADDRESS = row.S_ADDRESS,
-    s.S_NATIONKEY = row.S_NATIONKEY,
+    s.S_NATIONKEY = toInteger(row.S_NATIONKEY),
     s.S_PHONE = row.S_PHONE,
-    s.S_ACCTBAL = row.S_ACCTBAL,
+    s.S_ACCTBAL = toFloat(row.S_ACCTBAL),
     s.S_COMMENT = row.S_COMMENT
 ;
 
@@ -152,11 +152,58 @@ ON CREATE SET
 // load customer.csv
 USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM 'file:///customer.csv' AS row
 FIELDTERMINATOR '|'
-MATCH (customer:CUSTOMER {id: toInteger(row.C_CUSTKEY)})
-MATCH (nation:NATION {id: toInteger(row.C_NATIONKEY)})
-MERGE (customer)-[:FROM_4]->(nation);
+MATCH (c:CUSTOMER { id: toInteger(row.C_CUSTKEY) })
+MATCH (n:NATION { id: toInteger(row.C_NATIONKEY) })
+MERGE (c)-[:FROM_4]->(n);
 
 
 // load lineitem.csv
 USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM 'file:///lineitem.csv' AS row
 FIELDTERMINATOR '|'
+MATCH (l:LINEITEM { L_ORDERKEY: toInteger(row.L_ORDERKEY), L_PARTKEY: toInteger(row.L_PARTKEY), L_SUPPKEY: toInteger(row.L_SUPPKEY), L_LINENUMBER: toInteger(row.L_LINENUMBER) })
+MATCH (o:ORDERS { id: toInteger(row.L_ORDERKEY) })
+MERGE (l)-[:BELONGS_TO_7]->(o);
+
+USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM 'file:///lineitem.csv' AS row
+FIELDTERMINATOR '|'
+MATCH (l:LINEITEM { L_ORDERKEY: toInteger(row.L_ORDERKEY), L_PARTKEY: toInteger(row.L_PARTKEY), L_SUPPKEY: toInteger(row.L_SUPPKEY), L_LINENUMBER: toInteger(row.L_LINENUMBER) })
+MATCH (ps:PARTSUPP { PS_PARTKEY:toInteger(row.PS_PARTKEY) , PS_SUPPKEY: toInteger(row.PS_SUPPKEY) })
+MERGE (l)-[:COMPOSED_BY_6]->(ps);
+
+
+// load nation.csv
+USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM 'file:///nation.csv' AS row
+FIELDTERMINATOR '|'
+MATCH (n:NATION { id: toInteger(row.N_NATIONKEY) })
+MATCH (r:REGION { id: toInteger(row.N_REGIONKEY) })
+MERGE (n)-[:FROM_10]->(r);
+
+
+// load orders.csv
+USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM 'file:///orders.csv' AS row
+FIELDTERMINATOR '|'
+MATCH (o:ORDERS { id: toInteger(row.O_ORDERKEY) })
+MATCH (c:CUSTOMER { id: toInteger(row.O_CUSTKEY) })
+MERGE (o)-[:BY_5]->(c);
+
+
+// load partsupp.csv
+USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM 'file:///partsupp.csv' AS row
+FIELDTERMINATOR '|'
+MATCH (ps:PARTSUPP { PS_PARTKEY: toInteger(row.P_PARTKEY) })
+MATCH (p:PART { id: toInteger(row.P_PARTKEY) })
+MERGE (ps)-[:COMPOSED_BY_2]->(p);
+
+USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM 'file:///partsupp.csv' AS row
+FIELDTERMINATOR '|'
+MATCH (ps:PARTSUPP { PS_SUPPKEY: toInteger(row.PS_SUPPKEY) })
+MATCH (s:SUPPLIER { id: toInteger(row.PS_SUPPKEY) })
+MERGE (ps)-[:SUPPLIED_BY_3]->(s);
+
+
+// load supplier.csv
+USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM 'file:///supplier.csv' AS row
+FIELDTERMINATOR '|'
+MATCH (s:SUPPLIER { id: toInteger(row.S_SUPPKEY) })
+MATCH (n:NATION { id: toInteger(row.S_NATIONKEY) })
+MERGE (s)-[:BELONGS_TO_1]->(n);
