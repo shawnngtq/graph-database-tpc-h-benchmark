@@ -167,7 +167,7 @@ MERGE (l)-[:BELONGS_TO_7]->(o);
 USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM 'file:///lineitem.csv' AS row
 FIELDTERMINATOR '|'
 MATCH (l:LINEITEM { L_ORDERKEY: toInteger(row.L_ORDERKEY), L_PARTKEY: toInteger(row.L_PARTKEY), L_SUPPKEY: toInteger(row.L_SUPPKEY), L_LINENUMBER: toInteger(row.L_LINENUMBER) })
-MATCH (ps:PARTSUPP { PS_PARTKEY:toInteger(row.PS_PARTKEY) , PS_SUPPKEY: toInteger(row.PS_SUPPKEY) })
+MATCH (ps:PARTSUPP { PS_PARTKEY:toInteger(row.L_PARTKEY) , PS_SUPPKEY: toInteger(row.L_SUPPKEY) })
 MERGE (l)-[:COMPOSED_BY_6]->(ps);
 
 
@@ -190,8 +190,8 @@ MERGE (o)-[:BY_5]->(c);
 // load partsupp.csv
 USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM 'file:///partsupp.csv' AS row
 FIELDTERMINATOR '|'
-MATCH (ps:PARTSUPP { PS_PARTKEY: toInteger(row.P_PARTKEY) })
-MATCH (p:PART { id: toInteger(row.P_PARTKEY) })
+MATCH (ps:PARTSUPP { PS_PARTKEY: toInteger(row.PS_PARTKEY) })
+MATCH (p:PART { id: toInteger(row.PS_PARTKEY) })
 MERGE (ps)-[:COMPOSED_BY_2]->(p);
 
 USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM 'file:///partsupp.csv' AS row
