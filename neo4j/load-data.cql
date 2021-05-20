@@ -10,7 +10,7 @@ FIELDTERMINATOR '|'
 MERGE (c:CUSTOMER { id: toInteger(row.C_CUSTKEY) })
 ON CREATE SET
     c.C_NAME = row.C_NAME,
-	c.C_ADDRESS = row.C_ADDRESS,
+    c.C_ADDRESS = row.C_ADDRESS,
     c.C_NATIONKEY = toInteger(row.C_NATIONKEY),
     c.C_PHONE = row.C_PHONE,
     c.C_ACCTBAL = toFloat(row.C_ACCTBAL),
