@@ -1,7 +1,8 @@
-// create node
-// load customer.csv
 graph = TinkerGraph.open()
 g = graph.traversal()
+
+// create node
+// load customer.csv
 graph.createIndex('cust_key', Vertex.class)
 graph.createIndex('C_NATIONKEY', Vertex.class)
 
@@ -32,8 +33,6 @@ println("load customer.csv time taken: " + timeEnd - timeStart)
 
 
 // load lineitem.csv
-graph = TinkerGraph.open()
-g = graph.traversal()
 graph.createIndex('L_ORDERKEY', Vertex.class)
 graph.createIndex('L_PARTKEY', Vertex.class)
 graph.createIndex('L_SUPPKEY', Vertex.class)
@@ -70,8 +69,6 @@ println("load lineitem.csv time taken: " + timeEnd - timeStart)
 
 
 // load nation.csv
-graph = TinkerGraph.open()
-g = graph.traversal()
 graph.createIndex('nation_key', Vertex.class)
 graph.createIndex('N_REGIONKEY', Vertex.class)
 
@@ -94,8 +91,6 @@ println("load nation.csv time taken: " + timeEnd - timeStart)
 
 
 // load orders.csv
-graph = TinkerGraph.open()
-g = graph.traversal()
 graph.createIndex('order_key', Vertex.class)
 graph.createIndex('O_CUSTKEY', Vertex.class)
 
@@ -123,8 +118,6 @@ println("load orders.csv time taken: " + timeEnd - timeStart)
 
 
 // load partsupp.csv
-graph = TinkerGraph.open()
-g = graph.traversal()
 graph.createIndex('PS_PARTKEY', Vertex.class)
 graph.createIndex('PS_SUPPKEY', Vertex.class)
 
@@ -147,8 +140,6 @@ println("load partsupp.csv time taken: " + timeEnd - timeStart)
 
 
 // load part.csv
-graph = TinkerGraph.open()
-g = graph.traversal()
 graph.createIndex('part_key', Vertex.class)
 
 timeStart = System.currentTimeMillis()
@@ -175,8 +166,6 @@ println("load part.csv time taken: " + timeEnd - timeStart)
 
 
 // load region.csv
-graph = TinkerGraph.open()
-g = graph.traversal()
 graph.createIndex('region_key', Vertex.class)
 
 timeStart = System.currentTimeMillis()
@@ -198,8 +187,6 @@ println("load region.csv time taken: " + timeEnd - timeStart)
 
 
 // load supplier.csv
-graph = TinkerGraph.open()
-g = graph.traversal()
 graph.createIndex('supp_key', Vertex.class)
 graph.createIndex('S_NATIONKEY', Vertex.class)
 
@@ -227,6 +214,7 @@ println("load supplier.csv time taken: " + timeEnd - timeStart)
 
 
 // create edges
+// load customer.csv
 timeStart = System.currentTimeMillis()
 new File('customer.csv').eachLine(0) {line, number ->
     if (number != 0) {
