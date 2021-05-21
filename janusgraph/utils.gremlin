@@ -1,0 +1,8 @@
+// list vertex
+g.V().elementMap()
+
+// vertex group count
+g.V().groupCount().by(label)
+
+// edge group count
+g.E().groupCount().by(label)

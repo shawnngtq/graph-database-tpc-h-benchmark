@@ -29,7 +29,7 @@ new File('customer.csv').eachLine(0) {line, number ->
     }
 }
 timeEnd = System.currentTimeMillis()
-println("load customer.csv time taken: " + timeEnd - timeStart)
+println("load customer.csv time taken: " + (timeEnd - timeStart))
 
 
 // load lineitem.csv
@@ -65,7 +65,7 @@ new File('lineitem.csv').eachLine(0) {line, number ->
     }
 }
 timeEnd = System.currentTimeMillis()
-println("load lineitem.csv time taken: " + timeEnd - timeStart)
+println("load lineitem.csv time taken: " + (timeEnd - timeStart))
 
 
 // load nation.csv
@@ -87,7 +87,7 @@ new File('nation.csv').eachLine(0) {line, number ->
     }
 }
 timeEnd = System.currentTimeMillis()
-println("load nation.csv time taken: " + timeEnd - timeStart)
+println("load nation.csv time taken: " + (timeEnd - timeStart))
 
 
 // load orders.csv
@@ -114,7 +114,7 @@ new File('orders.csv').eachLine(0) {line, number ->
     }
 }
 timeEnd = System.currentTimeMillis()
-println("load orders.csv time taken: " + timeEnd - timeStart)
+println("load orders.csv time taken: " + (timeEnd - timeStart))
 
 
 // load partsupp.csv
@@ -136,7 +136,7 @@ new File('partsupp.csv').eachLine(0) {line, number ->
     }
 }
 timeEnd = System.currentTimeMillis()
-println("load partsupp.csv time taken: " + timeEnd - timeStart)
+println("load partsupp.csv time taken: " + (timeEnd - timeStart))
 
 
 // load part.csv
@@ -162,7 +162,7 @@ new File('part.csv').eachLine(0) {line, number ->
     }
 }
 timeEnd = System.currentTimeMillis()
-println("load part.csv time taken: " + timeEnd - timeStart)
+println("load part.csv time taken: " + (timeEnd - timeStart))
 
 
 // load region.csv
@@ -182,7 +182,7 @@ new File('region.csv').eachLine(0) {line, number ->
     }
 }
 timeEnd = System.currentTimeMillis()
-println("load region.csv time taken: " + timeEnd - timeStart)
+println("load region.csv time taken: " + (timeEnd - timeStart))
 
 
 
@@ -208,7 +208,7 @@ new File('supplier.csv').eachLine(0) {line, number ->
     }
 }
 timeEnd = System.currentTimeMillis()
-println("load supplier.csv time taken: " + timeEnd - timeStart)
+println("load supplier.csv time taken: " + (timeEnd - timeStart))
 
 
 
@@ -227,7 +227,7 @@ new File('customer.csv').eachLine(0) {line, number ->
     }
 }
 timeEnd = System.currentTimeMillis()
-println("load customer.csv edges time taken: " + timeEnd - timeStart)
+println("load customer.csv edges time taken: " + (timeEnd - timeStart))
 
 
 // load lineitem.csv
@@ -243,7 +243,7 @@ new File('lineitem.csv').eachLine(0) {line, number ->
     }
 }
 timeEnd = System.currentTimeMillis()
-println("load lineitem.csv edges time taken: " + timeEnd - timeStart)
+println("load lineitem.csv edges time taken: " + (timeEnd - timeStart))
 
 timeStart = System.currentTimeMillis()
 new File('lineitem.csv').eachLine(0) {line, number ->
@@ -257,7 +257,7 @@ new File('lineitem.csv').eachLine(0) {line, number ->
     }
 }
 timeEnd = System.currentTimeMillis()
-println("load lineitem.csv edges time taken: " + timeEnd - timeStart)
+println("load lineitem.csv edges time taken: " + (timeEnd - timeStart))
 
 
 // load nation.csv
@@ -273,7 +273,7 @@ new File('nation.csv').eachLine(0) {line, number ->
     }
 }
 timeEnd = System.currentTimeMillis()
-println("load nation.csv edges time taken: " + timeEnd - timeStart)
+println("load nation.csv edges time taken: " + (timeEnd - timeStart))
 
 
 // load orders.csv
@@ -289,7 +289,7 @@ new File('orders.csv').eachLine(0) {line, number ->
     }
 }
 timeEnd = System.currentTimeMillis()
-println("load orders.csv edges time taken: " + timeEnd - timeStart)
+println("load orders.csv edges time taken: " + (timeEnd - timeStart))
 
 
 // load partsupp.csv
@@ -305,7 +305,7 @@ new File('partsupp.csv').eachLine(0) {line, number ->
     }
 }
 timeEnd = System.currentTimeMillis()
-println("load partsupp.csv edges time taken: " + timeEnd - timeStart)
+println("load partsupp.csv edges time taken: " + (timeEnd - timeStart))
 
 timeStart = System.currentTimeMillis()
 new File('partsupp.csv').eachLine(0) {line, number ->
@@ -319,7 +319,7 @@ new File('partsupp.csv').eachLine(0) {line, number ->
     }
 }
 timeEnd = System.currentTimeMillis()
-println("load partsupp.csv edges time taken: " + timeEnd - timeStart)
+println("load partsupp.csv edges time taken: " + (timeEnd - timeStart))
 
 
 // load supplier.csv
@@ -335,4 +335,4 @@ new File('supplier.csv').eachLine(0) {line, number ->
     }
 }
 timeEnd = System.currentTimeMillis()
-println("load supplier.csv edges time taken: " + timeEnd - timeStart)
+println("load supplier.csv edges time taken: " + (timeEnd - timeStart))
