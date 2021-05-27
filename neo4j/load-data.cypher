@@ -154,7 +154,7 @@ USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM 'file:///customer.csv' AS row
 FIELDTERMINATOR '|'
 MATCH (c:CUSTOMER { id: toInteger(row.C_CUSTKEY) })
 MATCH (n:NATION { id: toInteger(row.C_NATIONKEY) })
-MERGE (c)-[:FROM_4]->(n);
+MERGE (c)-[:BELONG_TO]->(n);
 
 
 // load lineitem.csv
@@ -162,7 +162,7 @@ USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM 'file:///lineitem.csv' AS row
 FIELDTERMINATOR '|'
 MATCH (l:LINEITEM { L_ORDERKEY: toInteger(row.L_ORDERKEY), L_PARTKEY: toInteger(row.L_PARTKEY), L_SUPPKEY: toInteger(row.L_SUPPKEY), L_LINENUMBER: toInteger(row.L_LINENUMBER) })
 MATCH (o:ORDERS { id: toInteger(row.L_ORDERKEY) })
-MERGE (l)-[:BELONGS_TO_7]->(o);
+MERGE (l)-[:IS_PART_OF]->(o);
 
 USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM 'file:///lineitem.csv' AS row
 FIELDTERMINATOR '|'
@@ -176,7 +176,7 @@ USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM 'file:///nation.csv' AS row
 FIELDTERMINATOR '|'
 MATCH (n:NATION { id: toInteger(row.N_NATIONKEY) })
 MATCH (r:REGION { id: toInteger(row.N_REGIONKEY) })
-MERGE (n)-[:FROM_10]->(r);
+MERGE (n)-[:IS_FROM]->(r);
 
 
 // load orders.csv
@@ -184,7 +184,7 @@ USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM 'file:///orders.csv' AS row
 FIELDTERMINATOR '|'
 MATCH (o:ORDERS { id: toInteger(row.O_ORDERKEY) })
 MATCH (c:CUSTOMER { id: toInteger(row.O_CUSTKEY) })
-MERGE (o)-[:BY_5]->(c);
+MERGE (o)-[:MADE_BY]->(c);
 
 
 // load partsupp.csv
@@ -192,13 +192,13 @@ USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM 'file:///partsupp.csv' AS row
 FIELDTERMINATOR '|'
 MATCH (ps:PARTSUPP { PS_PARTKEY: toInteger(row.PS_PARTKEY) })
 MATCH (p:PART { id: toInteger(row.PS_PARTKEY) })
-MERGE (ps)-[:COMPOSED_BY_2]->(p);
+MERGE (ps)-[:COMPOSED_BY]->(p);
 
 USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM 'file:///partsupp.csv' AS row
 FIELDTERMINATOR '|'
 MATCH (ps:PARTSUPP { PS_SUPPKEY: toInteger(row.PS_SUPPKEY) })
 MATCH (s:SUPPLIER { id: toInteger(row.PS_SUPPKEY) })
-MERGE (ps)-[:SUPPLIED_BY_3]->(s);
+MERGE (ps)-[:SUPPLIED_BY]->(s);
 
 
 // load supplier.csv
@@ -206,4 +206,4 @@ USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM 'file:///supplier.csv' AS row
 FIELDTERMINATOR '|'
 MATCH (s:SUPPLIER { id: toInteger(row.S_SUPPKEY) })
 MATCH (n:NATION { id: toInteger(row.S_NATIONKEY) })
-MERGE (s)-[:BELONGS_TO_1]->(n);
+MERGE (s)-[:BELONG_TO]->(n);
