@@ -1,0 +1,42 @@
+# create nodes
+
+# load nation.csv
+CREATE VERTEX nation (PRIMARY_ID id UINT, N_NAME STRING, N_REGIONKEY INT, N_COMMENT STRING) WITH primary_id_as_attribute="TRUE"
+CREATE DIRECTED EDGE FROM_10 (FROM nation, TO region)
+CREATE GRAPH g_nation (nation, FROM_10)
+USE GRAPH g_nation
+BEGIN
+CREATE LOADING JOB load_nation FOR GRAPH g_nation {
+    DEFINE FILENAME file1="nation.csv";
+    LOAD file1 TO VERTEX nation USING header="true", separator="|";
+}
+END
+RUN LOADING JOB load_nation
+
+
+# load region.csv
+CREATE VERTEX region (PRIMARY_ID R_REGIONKEY UINT, R_NAME STRING, R_COMMENT STRING) WITH primary_id_as_attribute="TRUE"
+CREATE GRAPH region_g (region)
+USE GRAPH region_g
+BEGIN
+CREATE LOADING JOB load_region FOR GRAPH region_g {
+    DEFINE FILENAME file1="region.csv";
+    LOAD file1 TO VERTEX region USING header="true", separator="|";
+}
+END
+RUN LOADING JOB load_region
+
+
+
+
+# create edges
+# load nation.csv
+USE GRAPH g_nation
+BEGIN
+CREATE LOADING JOB load_nation_edge FOR GRAPH g_nation {
+    DEFINE FILENAME file1="nation.csv";
+    LOAD file1 TO VERTEX nation USING header="true", separator="|";
+    LOAD file1 TO EDGE FROM_10 VALUES ($0 nation, $2 region) USING header="true", separator="|";
+}
+END
+RUN LOADING JOB load_nation_edge
